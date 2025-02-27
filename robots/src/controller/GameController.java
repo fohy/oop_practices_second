@@ -19,10 +19,9 @@ public class GameController {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                // Pass the window dimensions to the updateModel method
                 model.updateModel(view.getWidth(), view.getHeight());
                 view.repaint();
             }
-        }, 0, 10);
+        }, 0, 5);
     }
 }

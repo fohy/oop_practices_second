@@ -15,6 +15,7 @@ import java.util.Properties;
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private static final String CONFIG_FILE = System.getProperty("user.home") + File.separator + "robotAppConfig.properties";
+    private RobotModel robotModel;
 
     public MainApplicationFrame() {
         int inset = 50;
@@ -23,13 +24,16 @@ public class MainApplicationFrame extends JFrame {
 
         setContentPane(desktopPane);
 
-        // Create and add the log window
+        robotModel = new RobotModel();
+
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        // Create and add the game window
         GameWindow gameWindow = createGameWindow();
         addWindow(gameWindow);
+
+        RobotCoordinatesWindow coordinatesWindow = new RobotCoordinatesWindow(robotModel);
+        addWindow(coordinatesWindow);
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -54,9 +58,8 @@ public class MainApplicationFrame extends JFrame {
     }
 
     protected GameWindow createGameWindow() {
-        RobotModel model = new RobotModel();
-        GameVisualizer visualizer = new GameVisualizer(model);
-        GameController controller = new GameController(model, visualizer);
+        GameVisualizer visualizer = new GameVisualizer(robotModel);
+        GameController controller = new GameController(robotModel, visualizer);
 
         GameWindow gameWindow = new GameWindow(visualizer);
         gameWindow.setSize(400, 400);
@@ -191,7 +194,6 @@ public class MainApplicationFrame extends JFrame {
                 }
             }
         } catch (IOException e) {
-            // If the file doesn't exist, just ignore and use default positions
         }
     }
 }
